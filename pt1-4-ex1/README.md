@@ -37,14 +37,51 @@ practiquescloud/
 
 ![Topologia de Xarxa](assets/topologia.png)
 
-La topologia mostra les dues instàncies EC2 dins de la VPC per defecte
-(`172.31.0.0/16`) i d'una subxarxa pública de `us-east-1d`. El trànsit d'Internet
-arriba a les instàncies a través de l'Internet Gateway associat a la VPC per
-defecte.
+El diagrama mostra el flux complet des d'Internet fins a les dues instàncies:
 
-> **Nota:** el diagrama s'ha generat com a material gràfic del projecte. Es pot
-> editar o substituir per un diagrama fet amb **draw.io** exportat a PNG mantenint
-> el mateix nom de fitxer (`assets/topologia.png`).
+```text
+Internet
+   │
+   ▼
+Internet Gateway (igw-04e0f0a4e5d573433)
+   │  0.0.0.0/0
+   ▼
+Taula de rutes (rtb-01264f0b4a1850280)
+   │  ruta local 172.31.0.0/16
+   ▼
+VPC per defecte (172.31.0.0/16)
+   └── Zona de disponibilitat us-east-1d
+        └── Subxarxa pública (172.31.16.0/20)
+             ├── EC2-AmazonLinux2023-1
+             └── EC2-AmazonLinux2023-2
+```
+
+### Recursos representats
+
+| Recurs | Valor |
+| --- | --- |
+| VPC | `vpc-0f97f20070b7e87b8` — `172.31.0.0/16` (per defecte) |
+| Zona de disponibilitat | `us-east-1d` |
+| Subxarxa pública | `subnet-079a35471bc94fa2b` — `172.31.16.0/20` |
+| Internet Gateway | `igw-04e0f0a4e5d573433` |
+| Taula de rutes | `rtb-01264f0b4a1850280` |
+| Security Group | `sg-03e31dc2b65844d39` (`default`) |
+| AMI | `ami-04b938437b69a2c9c` (Amazon Linux 2023 x86_64) |
+
+### Detalls de connectivitat
+
+- Les instàncies tenen **IP pública assignada automàticament** per la subxarxa.
+- La taula de rutes envia el trànsit `0.0.0.0/0` cap a l'**Internet Gateway** i el
+  trànsit intern `172.31.0.0/16` per la ruta `local`.
+- El **Security Group `default`** no obre ports SSH/HTTP des d'Internet; només
+  permet el trànsit entre instàncies del mateix grup. En aquest exercici no s'ha
+  definit cap *key pair* ni cap regla d'entrada addicional.
+- Les dues instàncies comparteixen la mateixa subxarxa i la mateixa zona de
+  disponibilitat (`us-east-1d`).
+
+> **Nota:** el diagrama és una representació gràfica del desplegament real. Es pot
+> substituir per un diagrama fet amb **draw.io** exportat a PNG mantenint el mateix
+> nom de fitxer (`assets/topologia.png`).
 
 ## Requisits previs
 
