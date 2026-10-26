@@ -38,7 +38,7 @@ practiquescloud/
 ![Topologia de Xarxa](assets/topologia.png)
 
 La topologia mostra les dues instàncies EC2 dins de la VPC per defecte
-(`172.31.0.0/16`) i d'una subxarxa pública de `us-east-1`. El trànsit d'Internet
+(`172.31.0.0/16`) i d'una subxarxa pública de `us-east-1d`. El trànsit d'Internet
 arriba a les instàncies a través de l'Internet Gateway associat a la VPC per
 defecte.
 
@@ -224,19 +224,43 @@ aws ec2 describe-instances \
 
 ## Resultat del desplegament
 
-Un cop executat `terraform apply`, els identificadors de les instàncies creades
-es poden consultar amb `terraform output instance_ids`. El format de sortida és:
+El desplegament s'ha executat correctament el **26/10/2026** a la regió
+`us-east-1`. Les dues instàncies han quedat en estat `running`:
+
+| Nom | ID d'instància | Tipus | Zona | IP pública | IP privada |
+| --- | --- | --- | --- | --- | --- |
+| `EC2-AmazonLinux2023-1` | `i-0414d4945e935d241` | `t3.micro` | `us-east-1d` | `54.90.196.144` | `172.31.19.14` |
+| `EC2-AmazonLinux2023-2` | `i-0210ba161c9079508` | `t3.micro` | `us-east-1d` | `3.95.211.84` | `172.31.30.47` |
+
+- **AMI utilitzada:** `ami-04b938437b69a2c9c` (Amazon Linux 2023 x86_64)
+- **Subxarxa:** `subnet-079a35471bc94fa2b` (subxarxa pública de la VPC per defecte)
+
+Sortida de `terraform output`:
 
 ```text
+ami_id = "ami-04b938437b69a2c9c"
 instance_ids = [
-  "i-xxxxxxxxxxxxxxxxx",
-  "i-yyyyyyyyyyyyyyyyy"
+  "i-0414d4945e935d241",
+  "i-0210ba161c9079508",
+]
+instance_names = [
+  "EC2-AmazonLinux2023-1",
+  "EC2-AmazonLinux2023-2",
+]
+instance_private_ips = [
+  "172.31.19.14",
+  "172.31.30.47",
+]
+instance_public_ips = [
+  "54.90.196.144",
+  "3.95.211.84",
 ]
 ```
 
-> Els IDs reals del desplegament fet durant la pràctica es mostren a la sortida
-> de `terraform apply` i al fitxer d'estat `terraform.tfstate`. Aquest fitxer no
-> es puja al repositori per seguretat.
+> Els IDs reals del desplegament també es poden consultar a la sortida de
+> `terraform apply` i al fitxer d'estat `terraform.tfstate`. Aquest fitxer no es
+> puja al repositori per seguretat. Si es torna a executar `terraform destroy` i
+> `terraform apply`, els IDs i les IPs canviaran.
 
 ## Costos i neteja
 
