@@ -42,6 +42,7 @@ dependre de clics a la interfície gràfica.
 practiquescloud/
 └── pt1-4-ex2/
     ├── assets/
+    │   ├── topologia.drawio
     │   ├── topologia.png
     │   ├── vpc_subnets.png
     │   └── ec2_instances.png
@@ -80,6 +81,10 @@ Gateway.
 ### Topologia de xarxa
 
 ![Topologia de xarxa](assets/topologia.png)
+
+> El diagrama s'ha dissenyat amb **draw.io**. El fitxer editable és
+> [`assets/topologia.drawio`](assets/topologia.drawio) i la imatge exportada en
+> format PNG és [`assets/topologia.png`](assets/topologia.png).
 
 ```text
 Internet
